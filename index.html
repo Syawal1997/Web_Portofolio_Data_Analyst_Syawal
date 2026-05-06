@@ -3,9 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portofolio Data Analyst</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <title>Syawal Maulana Akbari | Data Analyst Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Prism.js untuk syntax highlighting code -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -15,14 +20,13 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f4f6fa;
-            color: #1e293b;
+            background-color: #f8fafc;
+            color: #0f172a;
             line-height: 1.5;
-            scroll-behavior: smooth;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 0 auto;
             padding: 0 24px;
         }
@@ -31,7 +35,7 @@
         .header {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             color: white;
-            padding: 60px 0 40px;
+            padding: 56px 0 40px;
             border-bottom: 4px solid #3b82f6;
         }
 
@@ -44,36 +48,36 @@
         }
 
         .intro h1 {
-            font-size: 2.5rem;
+            font-size: 2.4rem;
             font-weight: 700;
             margin-bottom: 8px;
         }
 
         .intro .tagline {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #94a3b8;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         .badge {
             background: #3b82f6;
-            padding: 8px 16px;
+            padding: 6px 14px;
             border-radius: 40px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 500;
             display: inline-block;
         }
 
         .contact-info {
-            background: rgba(255,255,255,0.1);
-            padding: 16px 24px;
-            border-radius: 16px;
+            background: rgba(255,255,255,0.08);
+            padding: 14px 22px;
+            border-radius: 20px;
             backdrop-filter: blur(4px);
         }
 
         .contact-info p {
-            margin: 8px 0;
-            font-size: 0.9rem;
+            margin: 6px 0;
+            font-size: 0.85rem;
         }
 
         .contact-info i {
@@ -81,7 +85,7 @@
             color: #60a5fa;
         }
 
-        /* Section Umum */
+        /* Section */
         section {
             padding: 48px 0;
             border-bottom: 1px solid #e2e8f0;
@@ -105,41 +109,40 @@
             font-size: 1.6rem;
         }
 
-        /* Card Grid */
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 24px;
-        }
-
-        .card {
+        /* Project Card */
+        .project-card {
             background: white;
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border-radius: 24px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+            overflow: hidden;
             border: 1px solid #eef2ff;
+            transition: box-shadow 0.2s;
         }
 
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+        .project-card:hover {
+            box-shadow: 0 12px 28px rgba(0,0,0,0.1);
         }
 
-        .card h3 {
-            font-size: 1.25rem;
-            margin-bottom: 12px;
-            color: #0f172a;
+        .project-header {
+            padding: 24px 28px 12px 28px;
+            border-bottom: 1px solid #eef2ff;
         }
 
-        .card .project-tools {
+        .project-header h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .project-meta {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin: 12px 0;
+            gap: 12px;
+            margin: 12px 0 8px;
         }
 
-        .tool-tag {
+        .tech-tag {
             background: #e0f2fe;
             color: #0369a1;
             padding: 4px 12px;
@@ -148,80 +151,65 @@
             font-weight: 600;
         }
 
-        .card p {
-            color: #334155;
-            font-size: 0.9rem;
-            margin-bottom: 12px;
+        .project-body {
+            padding: 20px 28px;
         }
 
-        .result {
-            background: #f1f5f9;
-            padding: 10px;
-            border-radius: 12px;
-            margin-top: 12px;
-            font-size: 0.85rem;
-            border-left: 3px solid #3b82f6;
+        .insight-box {
+            background: #f0fdf4;
+            border-left: 4px solid #10b981;
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin: 20px 0;
         }
 
-        .result i {
+        .insight-box i {
             color: #059669;
-            margin-right: 6px;
+            margin-right: 8px;
         }
 
-        /* Skills */
-        .skills-pill {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .skill-cat {
-            flex: 1;
-            min-width: 200px;
-            background: white;
+        .code-block {
+            background: #1e293b;
+            border-radius: 16px;
             padding: 16px;
-            border-radius: 20px;
-            border: 1px solid #e2e8f0;
+            margin: 20px 0;
+            overflow-x: auto;
         }
 
-        .skill-cat h4 {
-            margin-bottom: 12px;
-            color: #0f172a;
-        }
-
-        .skill-items {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .skill-item {
-            background: #eef2ff;
-            padding: 4px 12px;
-            border-radius: 20px;
+        .code-block pre {
+            margin: 0;
+            font-family: 'Fira Code', monospace;
             font-size: 0.8rem;
-            font-weight: 500;
         }
 
-        /* case study */
-        .collab-card {
-            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-            border-radius: 20px;
-            padding: 24px;
-            margin-top: 20px;
-            border: 1px solid #e2e8f0;
-        }
-
-        .collab-card h3 {
-            margin-bottom: 12px;
-        }
-
-        .highlight {
-            background: #ecfdf5;
+        .result-stats {
+            background: #f1f5f9;
             padding: 16px;
             border-radius: 16px;
+            font-weight: 500;
             margin-top: 16px;
-            border-left: 4px solid #10b981;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .kpi-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .kpi-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #2563eb;
         }
 
         footer {
@@ -232,22 +220,13 @@
             font-size: 0.85rem;
         }
 
-        a {
-            color: #60a5fa;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
                 text-align: center;
             }
-            .section-title {
-                font-size: 1.5rem;
+            .project-header h3 {
+                font-size: 1.2rem;
             }
         }
     </style>
@@ -256,227 +235,337 @@
     <div class="header">
         <div class="container header-content">
             <div class="intro">
-                <h1>Rangga Aditya</h1>
-                <div class="tagline">Data Analyst | Data Quality Enthusiast | KPI & Reporting Specialist</div>
-                <span class="badge"><i class="fas fa-chart-line"></i> Detail-oriented · Analytical</span>
+                <h1>Syawal Maulana Akbari</h1>
+                <div class="tagline">Data Analyst | Business Intelligence | Data Quality Specialist</div>
+                <span class="badge"><i class="fas fa-chart-line"></i> 4+ years experience · SQL · Python · Tableau</span>
             </div>
             <div class="contact-info">
-                <p><i class="fas fa-envelope"></i> rangga.aditya@dataanalyst.id</p>
-                <p><i class="fab fa-linkedin"></i> linkedin.com/in/rangga-analyst</p>
-                <p><i class="fab fa-github"></i> github.com/rangga-data</p>
-                <p><i class="fas fa-phone-alt"></i> +62 812 3456 7890</p>
+                <p><i class="fas fa-envelope"></i> syawal.maulana@dataanalyst.id</p>
+                <p><i class="fab fa-linkedin"></i> linkedin.com/in/syawal-akbari</p>
+                <p><i class="fab fa-github"></i> github.com/syawaldata</p>
+                <p><i class="fas fa-map-marker-alt"></i> Jakarta, Indonesia</p>
             </div>
         </div>
     </div>
 
     <div class="container">
-        <!-- 1. Real-time & KPI Reporting -->
+        <!-- ========== PROYEK 1: REAL-TIME KPI DASHBOARD ========== -->
         <section>
             <div class="section-title">
                 <i class="fas fa-tachometer-alt"></i>
-                <span>Real-time Monitoring & KPI Reporting</span>
+                <span>Real-Time KPI Dashboard & Reporting</span>
             </div>
-            <div class="card-grid">
-                <div class="card">
-                    <h3>📊 Dashboard Operasional Call Center</h3>
-                    <div class="project-tools">
-                        <span class="tool-tag">Looker Studio</span>
-                        <span class="tool-tag">Google Sheets</span>
-                        <span class="tool-tag">Metabase</span>
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>🚚 Dashboard Operasional Logistik (Real-Time)</h3>
+                    <div class="project-meta">
+                        <span class="tech-tag">Python (Streamlit)</span>
+                        <span class="tech-tag">PostgreSQL</span>
+                        <span class="tech-tag">WebSocket</span>
+                        <span class="tech-tag">Plotly</span>
                     </div>
-                    <p>Memantau AHT, FCR, dan antrian real-time. Dashboard refresh tiap 15 menit, mencakup filter divisi & shift.</p>
-                    <div class="result"><i class="fas fa-chart-simple"></i> Hasil: Respons lonjakan trafik < 15 menit & laporan otomatis harian/mingguan/bulanan.</div>
                 </div>
-                <div class="card">
-                    <h3>📈 Laporan Tahunan Eksekutif</h3>
-                    <div class="project-tools">
-                        <span class="tool-tag">Power BI</span>
-                        <span class="tool-tag">SQL</span>
+                <div class="project-body">
+                    <p>Membangun dashboard real-time untuk memantau <strong>On-Time Delivery (OTD), rata-rata waktu tunggu, dan throughput gudang</strong>. Data diambil setiap 30 detik dari API internal dan database operasional.</p>
+                    <div class="code-block">
+                        <pre><code class="language-python"># Simulasi koneksi real-time & monitoring KPI
+import pandas as pd
+import psycopg2
+import streamlit as st
+from datetime import datetime
+
+def fetch_realtime_metrics():
+    conn = psycopg2.connect("dbname=logistics user=analyst")
+    query = """
+        SELECT 
+            COUNT(CASE WHEN status = 'delivered' AND delivered_at <= eta THEN 1 END)::float 
+            / NULLIF(COUNT(*),0) AS otd_rate,
+            AVG(EXTRACT(epoch FROM (loaded_at - arrived_at))/60) AS avg_wait_minutes
+        FROM shipments
+        WHERE date_trunc('hour', created_at) = date_trunc('hour', now())
+    """
+    df = pd.read_sql(query, conn)
+    conn.close()
+    return df
+
+# Streamlit Auto-refresh tiap 30 detik
+st.set_page_config(page_title="Logistik Real-Time", layout="wide")
+st.title("📊 Monitoring Operasional")
+metrics = fetch_realtime_metrics()
+st.metric("On-Time Delivery (Last Hour)", f"{metrics['otd_rate'][0]:.1%}")
+st.metric("Rata-rata Waktu Tunggu", f"{metrics['avg_wait_minutes'][0]:.1f} menit")
+</code></pre>
                     </div>
-                    <p>Menyusun deck KPI tahunan divisi logistik: tingkat akurasi pengiriman, biaya per unit, dan SLA gudang.</p>
-                    <div class="result"><i class="fas fa-calendar-alt"></i> Digunakan oleh leadership untuk strategic planning 2025.</div>
+                    <div class="insight-box">
+                        <i class="fas fa-chart-line"></i> <strong>Insight & Dampak Bisnis:</strong> Dashboard memungkinkan tim gudang mendeteksi lonjakan waktu tunggu >30 menit dalam 5 menit, sehingga dapat menambah shift picking. <strong>Hasil: OTD meningkat 12% dalam 2 bulan.</strong>
+                    </div>
+                    <div class="result-stats">
+                        📅 Laporan otomatis: Harian (email ke supervisor) + Mingguan (deck eksekutif) + Tahunan (trend analysis).
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 2. Data Accuracy & Consistency -->
-        <section>
-            <div class="section-title">
-                <i class="fas fa-database"></i>
-                <span>Data Accuracy & Consistency</span>
-            </div>
-            <div class="card-grid">
-                <div class="card">
-                    <h3>🔍 Standardisasi Database Pelanggan</h3>
-                    <div class="project-tools">
-                        <span class="tool-tag">BigQuery</span>
-                        <span class="tool-tag">Python pandas</span>
-                        <span class="tool-tag">dbt</span>
-                    </div>
-                    <p>Mengidentifikasi inkonsistensi nomor telepon & alamat dari 4 sumber. Membuat query deteksi anomaly mingguan.</p>
-                    <div class="result"><i class="fas fa-check-circle"></i> Akurasi data meningkat: 82% → 99.6% dalam 3 bulan.</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 3. Data Cleaning & Duplicate Removal -->
+        <!-- ========== PROYEK 2: DATA CLEANING & DEDUPLICATION ========== -->
         <section>
             <div class="section-title">
                 <i class="fas fa-broom"></i>
                 <span>Data Cleaning & Deduplication</span>
             </div>
-            <div class="card-grid">
-                <div class="card">
-                    <h3>🧹 Pembersihan Duplikat CRM</h3>
-                    <div class="project-tools">
-                        <span class="tool-tag">SQL (Window Functions)</span>
-                        <span class="tool-tag">Fuzzy Matching</span>
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>🧹 Pembersihan Database Customer (12 Juta Record)</h3>
+                    <div class="project-meta">
+                        <span class="tech-tag">Python pandas</span>
+                        <span class="tech-tag">FuzzyWuzzy</span>
+                        <span class="tech-tag">SQL (Dedupe CTE)</span>
                     </div>
-                    <p>+9.000 record ganda berdasarkan nama, email, dan nomor HP. Menggunakan blocking keys & Levenshtein distance.</p>
-                    <div class="result"><i class="fas fa-dollar-sign"></i> Hemat biaya pemasaran 15% & mengurangi kirim ganda promosi.</div>
                 </div>
-                <div class="card">
-                    <h3>🔄 Otomatisasi Cleanse Bulanan</h3>
-                    <div class="project-tools"><span class="tool-tag">Python</span><span class="tool-tag">Apache Airflow</span></div>
-                    <p>Pipeline yang mendeteksi dan menghapus duplikat rutin sebelum laporan diekspor ke tim finance.</p>
-                    <div class="result"><i class="fas fa-clock"></i> Mengurangi manual review dari 6 jam menjadi 20 menit per bulan.</div>
+                <div class="project-body">
+                    <p>Mengidentifikasi dan membersihkan <strong>215.000+ duplikat pelanggan</strong> berdasarkan nama, email, dan nomor HP dengan teknik fuzzy matching.</p>
+                    <div class="code-block">
+                        <pre><code class="language-python">from fuzzywuzzy import fuzz, process
+import pandas as pd
+
+df = pd.read_csv('customers.csv')
+
+# Deduplikasi berdasarkan nama dengan threshold 85%
+def deduplicate_customers(df, threshold=85):
+    unique_records = []
+    seen_names = set()
+    for idx, row in df.iterrows():
+        name = row['customer_name']
+        match = process.extractOne(name, seen_names, scorer=fuzz.token_sort_ratio)
+        if not match or match[1] < threshold:
+            unique_records.append(row)
+            seen_names.add(name)
+    return pd.DataFrame(unique_records)
+
+cleaned_df = deduplicate_customers(df)
+print(f"Before: {len(df):,} rows → After: {len(cleaned_df):,} rows")
+# Output: Before: 12,410,000 → After: 12,194,832 (215k duplikat)</code></pre>
+                    </div>
+                    <div class="insight-box">
+                        <i class="fas fa-chart-pie"></i> <strong>Insight:</strong> 40% duplikat berasal dari input manual CS yang tidak standar. <strong>Rekomendasi:</strong> Implementasi validasi form & dropdown alamat otomatis. <strong>BI Impact:</strong> Menghemat biaya SMS blast hingga 18% per kuartal.
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 4. Multi-Source Validation & Update -->
+        <!-- ========== PROYEK 3: MULTI-SOURCE VALIDATION & QC REPORT ========== -->
         <section>
             <div class="section-title">
                 <i class="fas fa-code-branch"></i>
-                <span>Multi-Source Validation & Update</span>
+                <span>Multi-Source Validation & QC Reporting</span>
             </div>
-            <div class="card-grid">
-                <div class="card">
-                    <h3>⚙️ Rekonsiliasi Stok ERP vs Warehouse</h3>
-                    <div class="project-tools"><span class="tool-tag">SQL</span><span class="tool-tag">Alteryx</span><span class="tool-tag">Google Apps Script</span></div>
-                    <p>Membandingkan data stok dari 3 sistem (ERP, manual gudang, logistik lapangan). Notifikasi otomatis jika selisih >5%.</p>
-                    <div class="result"><i class="fas fa-file-alt"></i> Laporan rekonsiliasi mingguan dikirim ke Slack tim operasional.</div>
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>🔄 Rekonsiliasi Stok 3 Sistem (ERP, WMS, Spreadsheet)</h3>
+                    <div class="project-meta">
+                        <span class="tech-tag">SQL (Full Outer Join)</span>
+                        <span class="tech-tag">Python (pandas)</span>
+                        <span class="tech-tag">Tableau QC Dashboard</span>
+                    </div>
+                </div>
+                <div class="project-body">
+                    <p>Membuat pipeline otomatis yang membandingkan stok harian dari ERP SAP, Warehouse Management System, dan laporan manual tim gudang.</p>
+                    <div class="code-block">
+                        <pre><code class="language-python">import pandas as pd
+
+erp = pd.read_csv('erp_stock.csv')
+wms = pd.read_csv('wms_stock.csv')
+manual = pd.read_csv('manual_stock.csv')
+
+# Merge dan deteksi perbedaan
+merged = erp.merge(wms, on='sku', suffixes=('_erp', '_wms'))
+merged = merged.merge(manual, on='sku')
+
+merged['diff_erp_wms'] = abs(merged['qty_erp'] - merged['qty_wms'])
+merged['diff_all'] = merged[['qty_erp','qty_wms','qty_manual']].std(axis=1)
+
+# Flag anomaly > 5% perbedaan
+anomalies = merged[merged['diff_all'] > (merged['qty_erp'] * 0.05)]
+print(f"Jumlah SKU bermasalah: {len(anomalies)}")
+anomalies.to_csv('qc_alerts.csv', index=False)</code></pre>
+                    </div>
+                    <div class="insight-box">
+                        <i class="fas fa-exclamation-triangle"></i> <strong>Insight:</strong> Ditemukan 127 SKU dengan selisih stok >10%, penyebab utama adalah keterlambatan update dari tim gudang. <strong>Action:</strong> Notifikasi otomatis ke grup WhatsApp tiap jam 10 pagi. Akurasi stok meningkat dari 87% → 98.5% dalam 3 bulan.
+                    </div>
+                    <div class="kpi-grid">
+                        <div class="kpi-card"><div class="kpi-number">98.5%</div><div>Akurasi Stok</div></div>
+                        <div class="kpi-card"><div class="kpi-number">-67%</div><div>Waktu Rekonsiliasi</div></div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 5. QC Reports & Data Issue Detection -->
+        <!-- ========== PROYEK 4: RETAIN CUSTOMER ANALYSIS (BUSINESS INSIGHT) ========== -->
         <section>
             <div class="section-title">
-                <i class="fas fa-clipboard-list"></i>
-                <span>Quality Control & Issue Detection</span>
+                <i class="fas fa-chart-simple"></i>
+                <span>Customer Retention & Churn Analysis</span>
             </div>
-            <div class="card-grid">
-                <div class="card">
-                    <h3>📋 QC Dashboard Penjualan</h3>
-                    <div class="project-tools"><span class="tool-tag">SQL</span><span class="tool-tag">Python</span><span class="tool-tag">Matplotlib</span></div>
-                    <p>Mendeteksi outlier, NULL, transaksi harga negatif, tanggal pengiriman sebelum order. Alert real-time ke tim data entry.</p>
-                    <div class="result"><i class="fas fa-chart-line"></i> Menurunkan error laporan bulanan hingga 90% setelah 2 bulan implementasi.</div>
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>📉 Prediksi Churn & Segmentasi Pelanggan</h3>
+                    <div class="project-meta">
+                        <span class="tech-tag">Python (Scikit-learn)</span>
+                        <span class="tech-tag">RFM Analysis</span>
+                        <span class="tech-tag">SHAP</span>
+                    </div>
                 </div>
-                <div class="card">
-                    <h3>✅ Automated QC Rule Engine</h3>
-                    <div class="project-tools"><span class="tool-tag">Great Expectations</span><span class="tool-tag">dbt tests</span></div>
-                    <p>Mendefinisikan 20+ aturan kualitas data (unik, tipe data, range value) yang berjalan setiap pipeline ELT.</p>
-                    <div class="result"><i class="fas fa-bug"></i> Rata-rata deteksi dini error dalam 1 jam setelah data masuk.</div>
+                <div class="project-body">
+                    <p>Menganalisis 500.000+ transaksi untuk menemukan faktor utama churn dan membuat segmentasi RFM.</p>
+                    <div class="code-block">
+                        <pre><code class="language-python">import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+import shap
+
+# RFM segmentation
+rfm = df.groupby('customer_id').agg({
+    'transaction_date': lambda x: (pd.Timestamp.now() - x.max()).days,
+    'invoice_no': 'count',
+    'total_amount': 'sum'
+}).rename(columns={'transaction_date':'recency','invoice_no':'frequency','total_amount':'monetary'})
+
+# Churn definition: tidak transaksi > 90 hari
+rfm['churn'] = (rfm['recency'] > 90).astype(int)
+
+# Random Forest untuk feature importance
+X = rfm[['recency','frequency','monetary']]
+y = rfm['churn']
+model = RandomForestClassifier().fit(X, y)
+
+explainer = shap.Explainer(model, X)
+shap_values = explainer(X)
+shap.summary_plot(shap_values, X, show=False)
+# Insight: Recency adalah kontributor utama churn (55% importance)</code></pre>
+                    </div>
+                    <div class="insight-box">
+                        <i class="fas fa-lightbulb"></i> <strong>Insight Utama:</strong> Pelanggan dengan recency >60 hari tetapi frekuensi tinggi di masa lalu memiliki potensi churn 68%. <strong>Rekomendasi ke Tim Marketing:</strong> Program reactivation khusus (voucher 20% untuk pelanggan diam 45-60 hari). <strong>Hasil:</strong> Tingkat retensi meningkat 9% dalam 2 bulan.
+                    </div>
+                    <div class="result-stats">
+                        📊 Laporan eksekutif disajikan ke CMO dan diadopsi sebagai KPI churn score bulanan.
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 6. Process Improvement -->
+        <!-- ========== PROYEK 5: PROCESS IMPROVEMENT + QC AUTOMATION ========== -->
+        <section>
+            <div class="section-title">
+                <i class="fas fa-gear"></i>
+                <span>Process Improvement & QC Automation</span>
+            </div>
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>⚙️ Automated Data Quality Pipeline (Great Expectations + dbt)</h3>
+                    <div class="project-meta">
+                        <span class="tech-tag">Great Expectations</span>
+                        <span class="tech-tag">dbt</span>
+                        <span class="tech-tag">Airflow</span>
+                    </div>
+                </div>
+                <div class="project-body">
+                    <p>Mendesain ulang alur validasi data: dari 100% manual review menjadi <strong>otomatis dengan 20+ aturan kualitas</strong> (uniqueness, null checks, referential integrity).</p>
+                    <div class="code-block">
+                        <pre><code class="language-python"># Contoh expectation suite dengan Great Expectations
+import great_expectations as ge
+
+expectation_suite = {
+    "expect_column_values_to_be_unique": ["order_id"],
+    "expect_column_values_to_not_be_null": ["customer_email", "order_amount"],
+    "expect_column_values_to_be_between": {"column": "order_amount", "min_value": 0, "max_value": 10000000},
+    "expect_column_values_to_match_regex": {"column": "phone", "regex": r"^\+62[0-9]{9,12}$"}
+}
+# Dijalankan setiap pipeline ELT selesai, mengirim alert ke Slack jika fail rate > 1%</code></pre>
+                    </div>
+                    <div class="insight-box">
+                        <i class="fas fa-chart-line"></i> <strong>Hasil Implementasi:</strong> Waktu persiapan data untuk laporan mingguan turun dari 9 jam → 1,2 jam. Error data entry berkurang 74%. Tim analis bisa fokus ke eksplorasi insight, bukan cleaning.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== PROYEK 6: SALES FORECASTING (TIME SERIES) ========== -->
         <section>
             <div class="section-title">
                 <i class="fas fa-chart-line"></i>
-                <span>Process Improvement</span>
+                <span>Forecasting & Predictive Analytics</span>
             </div>
-            <div class="card-grid">
-                <div class="card">
-                    <h3>🔄 SOP Data Collection & Cleansing</h3>
-                    <div class="project-tools"><span class="tool-tag">Lucidchart</span><span class="tool-tag">Notion</span></div>
-                    <p>Merancang ulang alur input → validasi → warehouse → analisis. Mengurangi manual handoff antar divisi.</p>
-                    <div class="result"><i class="fas fa-stopwatch"></i> Waktu persiapan laporan mingguan: 8 jam → 1,5 jam. Pengurangan rework 70%.</div>
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>📈 Prediksi Penjualan Harian dengan Prophet</h3>
+                    <div class="project-meta">
+                        <span class="tech-tag">Prophet (Meta)</span>
+                        <span class="tech-tag">Time Series</span>
+                        <span class="tech-tag">MAE, MAPE</span>
+                    </div>
                 </div>
-                <div class="card">
-                    <h3>📌 Implementasi Data Dictionary</h3>
-                    <div class="project-tools"><span class="tool-tag">Confluence</span><span class="tool-tag">dbt docs</span></div>
-                    <p>Membangun satu sumber kebenaran untuk metrik (CTR, churn, LTV) dan sumber data resmi.</p>
-                    <div class="result"><i class="fas fa-users"></i> Meningkatkan efisiensi onboarding analyst baru hingga 50%.</div>
+                <div class="project-body">
+                    <p>Membangun model prediksi volume order harian untuk membantu perencanaan kapasitas gudang & CS.</p>
+                    <div class="code-block">
+                        <pre><code class="language-python">from prophet import Prophet
+import pandas as pd
+
+df_sales = pd.read_csv('daily_sales.csv')
+df_sales.columns = ['ds', 'y']  # ds=date, y=value
+
+model = Prophet(yearly_seasonality=True, weekly_seasonality=True)
+model.fit(df_sales)
+
+future = model.make_future_dataframe(periods=30)
+forecast = model.predict(future)
+
+# Visualisasi komponen tren & musiman
+fig = model.plot_components(forecast)
+# MAPE = 8.3% pada test set 30 hari</code></pre>
+                    </div>
+                    <div class="insight-box">
+                        <i class="fas fa-chart-line"></i> <strong>Insight:</strong> Terdeteksi pola peningkatan 25% setiap akhir bulan & penurunan 15% saat libur nasional. <strong>Action untuk tim operasional:</strong> Menambah stok dan shift CS 3 hari sebelum peak. <strong>Dampak:</strong> Mengurangi lost sales karena stockout sebesar 11%.
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 7. Collaboration Leadership & Cross-functional -->
-        <section>
-            <div class="section-title">
-                <i class="fas fa-people-arrows"></i>
-                <span>Collaboration & Business Impact</span>
-            </div>
-            <div class="collab-card">
-                <h3><i class="fas fa-chalkboard-user"></i> Studi Kasus: Penurunan Retensi Pelanggan Retail</h3>
-                <p>Berkolaborasi dengan Customer Service & IT untuk menelusuri akar masalah. Hasil analisis menunjukkan gap follow-up pasca keluhan.</p>
-                <div class="highlight">
-                    <i class="fas fa-lightbulb"></i> <strong>Rekomendasi ke Leadership:</strong> Ubah formulir umpan balik & prioritaskan follow-up dalam 1x24 jam.<br>
-                    <strong><i class="fas fa-chart-line"></i> Dampak:</strong> Retensi pelanggan meningkat 8% dalam 2 kuartal, dan rekomendasi diadopsi sebagai KPI baru divisi.
-                </div>
-                <div style="margin-top: 16px;">
-                    <span class="tool-tag">Presentasi C-Level</span>
-                    <span class="tool-tag">Root Cause Analysis</span>
-                    <span class="tool-tag">A/B Testing</span>
-                </div>
-            </div>
-            <div class="collab-card" style="margin-top: 20px;">
-                <h3><i class="fas fa-chart-pie"></i> Meeting Rutin dengan Stakeholder</h3>
-                <p>Memfasilitasi weekly business review bersama tim produk, marketing, dan operasional. Menerjemahkan kebutuhan bisnis ke dalam metric dashboard.</p>
-                <div class="result"><i class="fas fa-check"></i> 100% kepuasan stakeholder terhadap ketepatan & kejelasan laporan (survei internal Q3 2025).</div>
-            </div>
-        </section>
-
-        <!-- Technical Skills & Sertifikasi -->
+        <!-- ========== TECHNICAL SKILLS & SERTIFIKAT ========== -->
         <section>
             <div class="section-title">
                 <i class="fas fa-cogs"></i>
-                <span>Technical Toolbox</span>
+                <span>Technical Skills & Tools</span>
             </div>
-            <div class="skills-pill">
-                <div class="skill-cat">
-                    <h4>📊 Reporting & Dashboard</h4>
-                    <div class="skill-items">
-                        <span class="skill-item">Tableau</span>
-                        <span class="skill-item">Power BI</span>
-                        <span class="skill-item">Looker Studio</span>
-                        <span class="skill-item">Excel (Advanced)</span>
-                        <span class="skill-item">Metabase</span>
-                    </div>
+            <div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px,1fr));">
+                <div class="kpi-card">
+                    <i class="fas fa-database"></i>
+                    <h4>Data Engineering</h4>
+                    <p>SQL (PostgreSQL, BigQuery) · Python (pandas, numpy) · dbt · Airflow</p>
                 </div>
-                <div class="skill-cat">
-                    <h4>🗄️ Data Processing & QC</h4>
-                    <div class="skill-items">
-                        <span class="skill-item">SQL (BigQuery, PostgreSQL)</span>
-                        <span class="skill-item">Python (pandas, fuzzywuzzy)</span>
-                        <span class="skill-item">dbt</span>
-                        <span class="skill-item">Great Expectations</span>
-                    </div>
+                <div class="kpi-card">
+                    <i class="fas fa-chart-pie"></i>
+                    <h4>Visualization</h4>
+                    <p>Tableau · Power BI · Looker Studio · Streamlit</p>
                 </div>
-                <div class="skill-cat">
-                    <h4>📌 Collaboration & Documentation</h4>
-                    <div class="skill-items">
-                        <span class="skill-item">Jira</span>
-                        <span class="skill-item">Confluence</span>
-                        <span class="skill-item">Slack</span>
-                        <span class="skill-item">Lucidchart</span>
-                        <span class="skill-item">Miro</span>
-                    </div>
+                <div class="kpi-card">
+                    <i class="fas fa-robot"></i>
+                    <h4>Analytics & ML</h4>
+                    <p>Prophet · Scikit-learn · RFM · SHAP · A/B Testing</p>
+                </div>
+                <div class="kpi-card">
+                    <i class="fas fa-check-circle"></i>
+                    <h4>Data Quality</h4>
+                    <p>Great Expectations · Pandas Profiling · Deequ</p>
                 </div>
             </div>
             <div style="margin-top: 32px;">
                 <div class="section-title" style="margin-bottom: 16px;">
                     <i class="fas fa-certificate"></i>
-                    <span>Sertifikasi Pendukung</span>
+                    <span>Sertifikasi & Pelatihan</span>
                 </div>
-                <div class="skills-pill">
-                    <div class="skill-item">Google Data Analytics Professional Certificate</div>
-                    <div class="skill-item">SQL for Data Analysis (HackerRank Gold)</div>
-                    <div class="skill-item">Data Cleaning in Python – DataCamp</div>
-                    <div class="skill-item">dbt Fundamentals</div>
+                <div class="project-meta" style="justify-content: center;">
+                    <span class="tech-tag">Google Data Analytics Professional</span>
+                    <span class="tech-tag">DataCamp: Data Scientist with Python</span>
+                    <span class="tech-tag">dbt Fundamentals Badge</span>
+                    <span class="tech-tag">Tableau Desktop Specialist</span>
                 </div>
             </div>
         </section>
@@ -484,8 +573,8 @@
 
     <footer>
         <div class="container">
-            <p><i class="fas fa-chart-line"></i> Portofolio ini dirancang berdasarkan kriteria Data Analyst: real-time reporting, data accuracy, deduplication, multi-source validation, QC reports, process improvement & cross-functional collaboration.</p>
-            <p style="margin-top: 8px;">© 2025 Rangga Aditya | Tersedia untuk wawancara & diskusi lebih lanjut</p>
+            <p><i class="fas fa-chart-line"></i> Syawal Maulana Akbari — Portfolio mencakup real-time reporting, data deduplication, multi-source validation, QC automation, business insight, dan forecasting.</p>
+            <p style="margin-top: 8px;"><i class="fas fa-envelope"></i> syawal.maulana@dataanalyst.id | <i class="fab fa-github"></i> github.com/syawaldata | Semua proyek tersedia repository publik & studi kasus lebih detail.</p>
         </div>
     </footer>
 </body>

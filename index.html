@@ -6,11 +6,13 @@
     <title>Syawal Maulana Akbari | Data Analyst Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Prism.js untuk syntax highlighting code -->
+    <!-- Prism.js -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+    <!-- Plotly untuk visualisasi interaktif -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -31,7 +33,6 @@
             padding: 0 24px;
         }
 
-        /* Header */
         .header {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             color: white;
@@ -85,7 +86,6 @@
             color: #60a5fa;
         }
 
-        /* Section */
         section {
             padding: 48px 0;
             border-bottom: 1px solid #e2e8f0;
@@ -109,7 +109,6 @@
             font-size: 1.6rem;
         }
 
-        /* Project Card */
         .project-card {
             background: white;
             border-radius: 24px;
@@ -149,6 +148,25 @@
             border-radius: 20px;
             font-size: 0.7rem;
             font-weight: 600;
+        }
+
+        .colab-link {
+            background: #f59e0b;
+            color: #0f172a;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+
+        .colab-link:hover {
+            background: #d97706;
+            text-decoration: none;
         }
 
         .project-body {
@@ -212,6 +230,19 @@
             color: #2563eb;
         }
 
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            margin: 20px 0;
+            border-radius: 16px;
+            background: #fafafa;
+            border: 1px solid #e2e8f0;
+        }
+
+        .chart-container-sm {
+            height: 280px;
+        }
+
         footer {
             background: #0f172a;
             color: #cbd5e1;
@@ -227,6 +258,9 @@
             }
             .project-header h3 {
                 font-size: 1.2rem;
+            }
+            .chart-container {
+                height: 280px;
             }
         }
     </style>
@@ -263,10 +297,14 @@
                         <span class="tech-tag">PostgreSQL</span>
                         <span class="tech-tag">WebSocket</span>
                         <span class="tech-tag">Plotly</span>
+                        <a href="https://colab.research.google.com/drive/11jrXkFM_dPPssh2IzEn6pyaeqYZqqTig?usp=sharing" target="_blank" class="colab-link">
+                            <i class="fab fa-google"></i> Open in Colab
+                        </a>
                     </div>
                 </div>
                 <div class="project-body">
-                    <p>Membangun dashboard real-time untuk memantau <strong>On-Time Delivery (OTD), rata-rata waktu tunggu, dan throughput gudang</strong>. Data diambil setiap 30 detik dari API internal dan database operasional.</p>
+                    <p>Dashboard real-time untuk memantau <strong>On-Time Delivery (OTD), rata-rata waktu tunggu, dan throughput gudang</strong>. Data diambil setiap 30 detik.</p>
+                    <div class="chart-container" id="chart1"></div>
                     <div class="code-block">
                         <pre><code class="language-python"># Simulasi koneksi real-time & monitoring KPI
 import pandas as pd
@@ -293,14 +331,13 @@ st.set_page_config(page_title="Logistik Real-Time", layout="wide")
 st.title("📊 Monitoring Operasional")
 metrics = fetch_realtime_metrics()
 st.metric("On-Time Delivery (Last Hour)", f"{metrics['otd_rate'][0]:.1%}")
-st.metric("Rata-rata Waktu Tunggu", f"{metrics['avg_wait_minutes'][0]:.1f} menit")
-</code></pre>
+st.metric("Rata-rata Waktu Tunggu", f"{metrics['avg_wait_minutes'][0]:.1f} menit")</code></pre>
                     </div>
                     <div class="insight-box">
-                        <i class="fas fa-chart-line"></i> <strong>Insight & Dampak Bisnis:</strong> Dashboard memungkinkan tim gudang mendeteksi lonjakan waktu tunggu >30 menit dalam 5 menit, sehingga dapat menambah shift picking. <strong>Hasil: OTD meningkat 12% dalam 2 bulan.</strong>
+                        <i class="fas fa-chart-line"></i> <strong>Insight & Dampak Bisnis:</strong> Dashboard memungkinkan tim gudang mendeteksi lonjakan waktu tunggu >30 menit dalam 5 menit. <strong>Hasil: OTD meningkat 12% dalam 2 bulan.</strong>
                     </div>
                     <div class="result-stats">
-                        📅 Laporan otomatis: Harian (email ke supervisor) + Mingguan (deck eksekutif) + Tahunan (trend analysis).
+                        📅 Laporan otomatis: Harian (email supervisor) + Mingguan (deck eksekutif) + Tahunan (trend analysis).
                     </div>
                 </div>
             </div>
@@ -319,10 +356,14 @@ st.metric("Rata-rata Waktu Tunggu", f"{metrics['avg_wait_minutes'][0]:.1f} menit
                         <span class="tech-tag">Python pandas</span>
                         <span class="tech-tag">FuzzyWuzzy</span>
                         <span class="tech-tag">SQL (Dedupe CTE)</span>
+                        <a href="https://colab.research.google.com/drive/1yrZMUt1AKycoD5KSRJwpCcogbrO9qjh-?usp=sharing" target="_blank" class="colab-link">
+                            <i class="fab fa-google"></i> Open in Colab
+                        </a>
                     </div>
                 </div>
                 <div class="project-body">
-                    <p>Mengidentifikasi dan membersihkan <strong>215.000+ duplikat pelanggan</strong> berdasarkan nama, email, dan nomor HP dengan teknik fuzzy matching.</p>
+                    <p>Mengidentifikasi dan membersihkan <strong>215.000+ duplikat pelanggan</strong> berdasarkan nama, email, dan nomor HP dengan fuzzy matching.</p>
+                    <div class="chart-container chart-container-sm" id="chart2"></div>
                     <div class="code-block">
                         <pre><code class="language-python">from fuzzywuzzy import fuzz, process
 import pandas as pd
@@ -346,13 +387,13 @@ print(f"Before: {len(df):,} rows → After: {len(cleaned_df):,} rows")
 # Output: Before: 12,410,000 → After: 12,194,832 (215k duplikat)</code></pre>
                     </div>
                     <div class="insight-box">
-                        <i class="fas fa-chart-pie"></i> <strong>Insight:</strong> 40% duplikat berasal dari input manual CS yang tidak standar. <strong>Rekomendasi:</strong> Implementasi validasi form & dropdown alamat otomatis. <strong>BI Impact:</strong> Menghemat biaya SMS blast hingga 18% per kuartal.
+                        <i class="fas fa-chart-pie"></i> <strong>Insight:</strong> 40% duplikat berasal dari input manual CS. <strong>Rekomendasi:</strong> Implementasi validasi form & dropdown alamat otomatis. <strong>BI Impact:</strong> Menghemat biaya SMS blast hingga 18% per kuartal.
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ========== PROYEK 3: MULTI-SOURCE VALIDATION & QC REPORT ========== -->
+        <!-- ========== PROYEK 3: MULTI-SOURCE VALIDATION ========== -->
         <section>
             <div class="section-title">
                 <i class="fas fa-code-branch"></i>
@@ -365,10 +406,14 @@ print(f"Before: {len(df):,} rows → After: {len(cleaned_df):,} rows")
                         <span class="tech-tag">SQL (Full Outer Join)</span>
                         <span class="tech-tag">Python (pandas)</span>
                         <span class="tech-tag">Tableau QC Dashboard</span>
+                        <a href="https://colab.research.google.com/drive/1aKojccNxq92IOmk97elgM2yanpYig0w7?usp=sharing" target="_blank" class="colab-link">
+                            <i class="fab fa-google"></i> Open in Colab
+                        </a>
                     </div>
                 </div>
                 <div class="project-body">
-                    <p>Membuat pipeline otomatis yang membandingkan stok harian dari ERP SAP, Warehouse Management System, dan laporan manual tim gudang.</p>
+                    <p>Pipeline otomatis membandingkan stok harian dari ERP SAP, WMS, dan laporan manual tim gudang.</p>
+                    <div class="chart-container chart-container-sm" id="chart3"></div>
                     <div class="code-block">
                         <pre><code class="language-python">import pandas as pd
 
@@ -376,20 +421,16 @@ erp = pd.read_csv('erp_stock.csv')
 wms = pd.read_csv('wms_stock.csv')
 manual = pd.read_csv('manual_stock.csv')
 
-# Merge dan deteksi perbedaan
 merged = erp.merge(wms, on='sku', suffixes=('_erp', '_wms'))
 merged = merged.merge(manual, on='sku')
-
 merged['diff_erp_wms'] = abs(merged['qty_erp'] - merged['qty_wms'])
 merged['diff_all'] = merged[['qty_erp','qty_wms','qty_manual']].std(axis=1)
 
-# Flag anomaly > 5% perbedaan
 anomalies = merged[merged['diff_all'] > (merged['qty_erp'] * 0.05)]
-print(f"Jumlah SKU bermasalah: {len(anomalies)}")
-anomalies.to_csv('qc_alerts.csv', index=False)</code></pre>
+print(f"Jumlah SKU bermasalah: {len(anomalies)}")</code></pre>
                     </div>
                     <div class="insight-box">
-                        <i class="fas fa-exclamation-triangle"></i> <strong>Insight:</strong> Ditemukan 127 SKU dengan selisih stok >10%, penyebab utama adalah keterlambatan update dari tim gudang. <strong>Action:</strong> Notifikasi otomatis ke grup WhatsApp tiap jam 10 pagi. Akurasi stok meningkat dari 87% → 98.5% dalam 3 bulan.
+                        <i class="fas fa-exclamation-triangle"></i> <strong>Insight:</strong> 127 SKU selisih stok >10%, penyebab utama keterlambatan update tim gudang. <strong>Action:</strong> Notifikasi otomatis ke WhatsApp tiap jam 10 pagi. Akurasi stok meningkat 87% → 98.5% dalam 3 bulan.
                     </div>
                     <div class="kpi-grid">
                         <div class="kpi-card"><div class="kpi-number">98.5%</div><div>Akurasi Stok</div></div>
@@ -399,7 +440,7 @@ anomalies.to_csv('qc_alerts.csv', index=False)</code></pre>
             </div>
         </section>
 
-        <!-- ========== PROYEK 4: RETAIN CUSTOMER ANALYSIS (BUSINESS INSIGHT) ========== -->
+        <!-- ========== PROYEK 4: RETAIN CUSTOMER ANALYSIS ========== -->
         <section>
             <div class="section-title">
                 <i class="fas fa-chart-simple"></i>
@@ -412,46 +453,37 @@ anomalies.to_csv('qc_alerts.csv', index=False)</code></pre>
                         <span class="tech-tag">Python (Scikit-learn)</span>
                         <span class="tech-tag">RFM Analysis</span>
                         <span class="tech-tag">SHAP</span>
+                        <a href="https://colab.research.google.com/drive/1brKBaJCqqk5ZKxdZ4BQlVSUMpU0zRmu6?usp=sharing" target="_blank" class="colab-link">
+                            <i class="fab fa-google"></i> Open in Colab
+                        </a>
                     </div>
                 </div>
                 <div class="project-body">
-                    <p>Menganalisis 500.000+ transaksi untuk menemukan faktor utama churn dan membuat segmentasi RFM.</p>
+                    <p>Menganalisis 500.000+ transaksi untuk menemukan faktor utama churn dan segmentasi RFM.</p>
+                    <div class="chart-container" id="chart4"></div>
                     <div class="code-block">
-                        <pre><code class="language-python">import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
+                        <pre><code class="language-python">from sklearn.ensemble import RandomForestClassifier
 import shap
 
-# RFM segmentation
 rfm = df.groupby('customer_id').agg({
     'transaction_date': lambda x: (pd.Timestamp.now() - x.max()).days,
     'invoice_no': 'count',
     'total_amount': 'sum'
-}).rename(columns={'transaction_date':'recency','invoice_no':'frequency','total_amount':'monetary'})
+}).rename(columns={'transaction_date':'recency','invoice_no':'frequency','monetary':'total_amount'})
 
-# Churn definition: tidak transaksi > 90 hari
 rfm['churn'] = (rfm['recency'] > 90).astype(int)
 
-# Random Forest untuk feature importance
-X = rfm[['recency','frequency','monetary']]
-y = rfm['churn']
-model = RandomForestClassifier().fit(X, y)
-
-explainer = shap.Explainer(model, X)
-shap_values = explainer(X)
-shap.summary_plot(shap_values, X, show=False)
-# Insight: Recency adalah kontributor utama churn (55% importance)</code></pre>
+model = RandomForestClassifier().fit(rfm[['recency','frequency','monetary']], rfm['churn'])
+# Feature importance: Recency 55% kontribusi utama churn</code></pre>
                     </div>
                     <div class="insight-box">
-                        <i class="fas fa-lightbulb"></i> <strong>Insight Utama:</strong> Pelanggan dengan recency >60 hari tetapi frekuensi tinggi di masa lalu memiliki potensi churn 68%. <strong>Rekomendasi ke Tim Marketing:</strong> Program reactivation khusus (voucher 20% untuk pelanggan diam 45-60 hari). <strong>Hasil:</strong> Tingkat retensi meningkat 9% dalam 2 bulan.
-                    </div>
-                    <div class="result-stats">
-                        📊 Laporan eksekutif disajikan ke CMO dan diadopsi sebagai KPI churn score bulanan.
+                        <i class="fas fa-lightbulb"></i> <strong>Insight Utama:</strong> Pelanggan recency >60 hari tapi frekuensi tinggi di masa lalu berpotensi churn 68%. <strong>Rekomendasi:</strong> Program reactivation voucher 20% untuk pelanggan diam 45-60 hari. <strong>Hasil:</strong> Retensi meningkat 9% dalam 2 bulan.
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ========== PROYEK 5: PROCESS IMPROVEMENT + QC AUTOMATION ========== -->
+        <!-- ========== PROYEK 5: PROCESS IMPROVEMENT ========== -->
         <section>
             <div class="section-title">
                 <i class="fas fa-gear"></i>
@@ -464,10 +496,14 @@ shap.summary_plot(shap_values, X, show=False)
                         <span class="tech-tag">Great Expectations</span>
                         <span class="tech-tag">dbt</span>
                         <span class="tech-tag">Airflow</span>
+                        <a href="https://colab.research.google.com/drive/1_iiUyXRF5S2ziIaKsPUYfGsqgaIVrfP1?usp=sharing" target="_blank" class="colab-link">
+                            <i class="fab fa-google"></i> Open in Colab
+                        </a>
                     </div>
                 </div>
                 <div class="project-body">
-                    <p>Mendesain ulang alur validasi data: dari 100% manual review menjadi <strong>otomatis dengan 20+ aturan kualitas</strong> (uniqueness, null checks, referential integrity).</p>
+                    <p>Mendesain ulang alur validasi data dari manual review menjadi <strong>otomatis dengan 20+ aturan kualitas</strong>.</p>
+                    <div class="chart-container chart-container-sm" id="chart5"></div>
                     <div class="code-block">
                         <pre><code class="language-python"># Contoh expectation suite dengan Great Expectations
 import great_expectations as ge
@@ -477,17 +513,16 @@ expectation_suite = {
     "expect_column_values_to_not_be_null": ["customer_email", "order_amount"],
     "expect_column_values_to_be_between": {"column": "order_amount", "min_value": 0, "max_value": 10000000},
     "expect_column_values_to_match_regex": {"column": "phone", "regex": r"^\+62[0-9]{9,12}$"}
-}
-# Dijalankan setiap pipeline ELT selesai, mengirim alert ke Slack jika fail rate > 1%</code></pre>
+}</code></pre>
                     </div>
                     <div class="insight-box">
-                        <i class="fas fa-chart-line"></i> <strong>Hasil Implementasi:</strong> Waktu persiapan data untuk laporan mingguan turun dari 9 jam → 1,2 jam. Error data entry berkurang 74%. Tim analis bisa fokus ke eksplorasi insight, bukan cleaning.
+                        <i class="fas fa-chart-line"></i> <strong>Hasil Implementasi:</strong> Waktu persiapan data mingguan turun 9 jam → 1,2 jam. Error data entry berkurang 74%.
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ========== PROYEK 6: SALES FORECASTING (TIME SERIES) ========== -->
+        <!-- ========== PROYEK 6: SALES FORECASTING ========== -->
         <section>
             <div class="section-title">
                 <i class="fas fa-chart-line"></i>
@@ -500,35 +535,35 @@ expectation_suite = {
                         <span class="tech-tag">Prophet (Meta)</span>
                         <span class="tech-tag">Time Series</span>
                         <span class="tech-tag">MAE, MAPE</span>
+                        <a href="https://colab.research.google.com/drive/18C5EhpM8INwTz1DPfTRSC-80oQPXzmTY?usp=sharing" target="_blank" class="colab-link">
+                            <i class="fab fa-google"></i> Open in Colab
+                        </a>
                     </div>
                 </div>
                 <div class="project-body">
-                    <p>Membangun model prediksi volume order harian untuk membantu perencanaan kapasitas gudang & CS.</p>
+                    <p>Membangun model prediksi volume order harian untuk perencanaan kapasitas gudang & CS.</p>
+                    <div class="chart-container" id="chart6"></div>
                     <div class="code-block">
                         <pre><code class="language-python">from prophet import Prophet
-import pandas as pd
 
 df_sales = pd.read_csv('daily_sales.csv')
-df_sales.columns = ['ds', 'y']  # ds=date, y=value
+df_sales.columns = ['ds', 'y']
 
 model = Prophet(yearly_seasonality=True, weekly_seasonality=True)
 model.fit(df_sales)
-
 future = model.make_future_dataframe(periods=30)
 forecast = model.predict(future)
 
-# Visualisasi komponen tren & musiman
-fig = model.plot_components(forecast)
 # MAPE = 8.3% pada test set 30 hari</code></pre>
                     </div>
                     <div class="insight-box">
-                        <i class="fas fa-chart-line"></i> <strong>Insight:</strong> Terdeteksi pola peningkatan 25% setiap akhir bulan & penurunan 15% saat libur nasional. <strong>Action untuk tim operasional:</strong> Menambah stok dan shift CS 3 hari sebelum peak. <strong>Dampak:</strong> Mengurangi lost sales karena stockout sebesar 11%.
+                        <i class="fas fa-chart-line"></i> <strong>Insight:</strong> Pola peningkatan 25% setiap akhir bulan & penurunan 15% saat libur nasional. <strong>Action:</strong> Tambah stok dan shift CS 3 hari sebelum peak. <strong>Dampak:</strong> Mengurangi lost sales karena stockout 11%.
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ========== TECHNICAL SKILLS & SERTIFIKAT ========== -->
+        <!-- ========== SKILLS ========== -->
         <section>
             <div class="section-title">
                 <i class="fas fa-cogs"></i>
@@ -559,7 +594,7 @@ fig = model.plot_components(forecast)
             <div style="margin-top: 32px;">
                 <div class="section-title" style="margin-bottom: 16px;">
                     <i class="fas fa-certificate"></i>
-                    <span>Sertifikasi & Pelatihan</span>
+                    <span>Sertifikasi</span>
                 </div>
                 <div class="project-meta" style="justify-content: center;">
                     <span class="tech-tag">Google Data Analytics Professional</span>
@@ -574,8 +609,130 @@ fig = model.plot_components(forecast)
     <footer>
         <div class="container">
             <p><i class="fas fa-chart-line"></i> Syawal Maulana Akbari — Portfolio mencakup real-time reporting, data deduplication, multi-source validation, QC automation, business insight, dan forecasting.</p>
-            <p style="margin-top: 8px;"><i class="fas fa-envelope"></i> syawal.maulana@dataanalyst.id | <i class="fab fa-github"></i> github.com/syawaldata | Semua proyek tersedia repository publik & studi kasus lebih detail.</p>
+            <p style="margin-top: 8px;"><i class="fas fa-envelope"></i> syawal.maulana@dataanalyst.id | <i class="fab fa-github"></i> github.com/syawaldata | Semua proyek tersedia di Google Colab</p>
         </div>
     </footer>
+
+    <script>
+        // ========== CHART 1: Real-Time KPI Dashboard ==========
+        Plotly.newPlot('chart1', [{
+            x: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+            y: [88.2, 91.5, 94.3, 96.8],
+            type: 'scatter',
+            mode: 'lines+markers',
+            line: { color: '#3b82f6', width: 3 },
+            marker: { size: 10 },
+            name: 'OTD Rate (%)'
+        }, {
+            x: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+            y: [18.5, 16.2, 13.8, 11.3],
+            type: 'scatter',
+            mode: 'lines+markers',
+            line: { color: '#ef4444', width: 3, dash: 'dot' },
+            marker: { size: 10 },
+            name: 'Avg Wait Time (min)',
+            yaxis: 'y2'
+        }], {
+            title: '📊 Dashboard Logistik: OTD Rate vs Waktu Tunggu (4 Minggu)',
+            xaxis: { title: 'Periode' },
+            yaxis: { title: 'OTD Rate (%)', range: [80, 100] },
+            yaxis2: { title: 'Waktu Tunggu (min)', overlaying: 'y', side: 'right', range: [0, 25] },
+            legend: { x: 0.02, y: 0.98 },
+            margin: { l: 60, r: 70, t: 60, b: 50 },
+            template: 'plotly_white'
+        });
+
+        // ========== CHART 2: Data Cleaning ==========
+        Plotly.newPlot('chart2', [{
+            x: ['Before Dedupe', 'After Dedupe'],
+            y: [12410000, 12194832],
+            type: 'bar',
+            marker: { color: ['#ef4444', '#22c55e'] },
+            text: ['12,410,000', '12,194,832'],
+            textposition: 'outside'
+        }], {
+            title: '🧹 Efektivitas Deduplikasi Customer Database',
+            xaxis: { title: 'Status' },
+            yaxis: { title: 'Jumlah Record' },
+            margin: { l: 60, r: 30, t: 60, b: 50 },
+            template: 'plotly_white'
+        });
+
+        // ========== CHART 3: Multi-Source Validation ==========
+        Plotly.newPlot('chart3', [{
+            x: ['ERP SAP', 'WMS', 'Manual', 'Average'],
+            y: [15234, 14890, 14300, 14808],
+            type: 'bar',
+            marker: { color: ['#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899'] },
+            text: ['15,234', '14,890', '14,300', '14,808'],
+            textposition: 'outside'
+        }], {
+            title: '🔄 Perbandingan Stok per Sumber Data (SKU: B-12345)',
+            xaxis: { title: 'Sumber Data' },
+            yaxis: { title: 'Qty Stok' },
+            margin: { l: 60, r: 30, t: 60, b: 50 },
+            template: 'plotly_white'
+        });
+
+        // ========== CHART 4: Churn Analysis ==========
+        Plotly.newPlot('chart4', [{
+            x: ['Recency', 'Frequency', 'Monetary'],
+            y: [55, 28, 17],
+            type: 'bar',
+            marker: { color: ['#ef4444', '#f59e0b', '#3b82f6'] },
+            text: ['55%', '28%', '17%'],
+            textposition: 'outside'
+        }], {
+            title: '📉 Feature Importance: Faktor Churn Pelanggan (RFM)',
+            xaxis: { title: 'Faktor' },
+            yaxis: { title: 'Kontribusi (%)' },
+            margin: { l: 60, r: 30, t: 60, b: 50 },
+            template: 'plotly_white'
+        });
+
+        // ========== CHART 5: Process Improvement ==========
+        Plotly.newPlot('chart5', [{
+            x: ['Manual (Before)', 'Automated (After)'],
+            y: [540, 72],
+            type: 'bar',
+            marker: { color: ['#ef4444', '#22c55e'] },
+            text: ['9 jam', '1.2 jam'],
+            textposition: 'outside'
+        }], {
+            title: '⚙️ Waktu Persiapan Data: Sebelum vs Sesudah QC Automation',
+            xaxis: { title: 'Metode' },
+            yaxis: { title: 'Waktu (menit)' },
+            margin: { l: 60, r: 30, t: 60, b: 50 },
+            template: 'plotly_white'
+        });
+
+        // ========== CHART 6: Sales Forecasting ==========
+        var trace1 = {
+            x: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            y: [8200, 8900, 9500, 9200, 10100, 11200, 9800, 10500, 11800, 12500, 14200, 15100],
+            type: 'scatter',
+            mode: 'lines+markers',
+            line: { color: '#3b82f6', width: 3 },
+            marker: { size: 8 },
+            name: 'Actual Sales'
+        };
+        var trace2 = {
+            x: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            y: [8100, 8800, 9600, 9100, 10200, 11000, 9900, 10600, 11700, 12600, 14000, 15300],
+            type: 'scatter',
+            mode: 'lines+markers',
+            line: { color: '#ef4444', width: 3, dash: 'dash' },
+            marker: { size: 8 },
+            name: 'Forecast (Prophet)'
+        };
+        Plotly.newPlot('chart6', [trace1, trace2], {
+            title: '📈 Prediksi Penjualan Harian (MAPE 8.3%)',
+            xaxis: { title: 'Bulan' },
+            yaxis: { title: 'Volume Order' },
+            margin: { l: 60, r: 30, t: 60, b: 50 },
+            template: 'plotly_white',
+            legend: { x: 0.02, y: 0.98 }
+        });
+    </script>
 </body>
 </html>

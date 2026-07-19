@@ -1,4 +1,434 @@
-<!-- ===== CAROUSEL (PORTFOLIO SHOWCASE) - FIXED ===== -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Syawal Maulana Akbari - Data Analyst Portfolio">
+    <title>Syawal Maulana Akbari | Data Analyst Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* ===== LOADING ===== */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease;
+        }
+        #loading-screen.fade-out { opacity: 0; pointer-events: none; }
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(226,232,240,0.6);
+            transition: all 0.3s;
+        }
+        .navbar.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 72px;
+        }
+        .nav-logo { font-size: 1.2rem; font-weight: 700; color: #0f172a; text-decoration: none; }
+        .nav-logo span { color: #3b82f6; }
+        .nav-menu { display: flex; list-style: none; gap: 2rem; }
+        .nav-link { color: #334155; text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.3s; position: relative; }
+        .nav-link:hover, .nav-link.active { color: #3b82f6; }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: -4px; left: 0;
+            width: 0; height: 2px; background: #3b82f6; transition: width 0.3s;
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        .hamburger { display: none; flex-direction: column; cursor: pointer; gap: 5px; }
+        .hamburger .bar { width: 28px; height: 2.5px; background: #0f172a; border-radius: 2px; transition: 0.3s; }
+        .hamburger.active .bar:nth-child(2) { opacity: 0; }
+        .hamburger.active .bar:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+        .hamburger.active .bar:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+            padding-top: 72px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: -50%; right: -30%;
+            width: 70%; height: 150%;
+            background: radial-gradient(ellipse, rgba(59,130,246,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-container { max-width: 900px; padding: 2rem; position: relative; z-index: 1; }
+        .hero-badge {
+            display: inline-block; background: rgba(59,130,246,0.12); color: #3b82f6;
+            padding: 0.4rem 1.2rem; border-radius: 40px; font-size: 0.85rem; font-weight: 600;
+            margin-bottom: 1.5rem; animation: fadeInUp 0.8s 0.2s both;
+        }
+        .hero-title { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; margin-bottom: 0.5rem; animation: fadeInUp 0.8s 0.3s both; }
+        .hero-title .highlight { background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-subtitle { font-size: clamp(1.1rem, 2vw, 1.4rem); color: #475569; margin-bottom: 1rem; animation: fadeInUp 0.8s 0.4s both; }
+        .hero-description { font-size: 1.1rem; color: #64748b; max-width: 600px; margin: 0 auto 2rem; animation: fadeInUp 0.8s 0.5s both; }
+        .hero-stats { display: flex; justify-content: center; gap: 3rem; margin-bottom: 2.5rem; animation: fadeInUp 0.8s 0.6s both; flex-wrap: wrap; }
+        .hero-stat .number { display: block; font-size: 2rem; font-weight: 800; color: #0f172a; }
+        .hero-stat .label { font-size: 0.85rem; color: #64748b; font-weight: 500; }
+        .cta-button {
+            display: inline-block; background: #3b82f6; color: #fff; padding: 0.9rem 2.5rem;
+            border-radius: 50px; text-decoration: none; font-weight: 600;
+            transition: all 0.3s; box-shadow: 0 4px 14px rgba(59,130,246,0.3);
+            animation: fadeInUp 0.8s 0.7s both;
+        }
+        .cta-button:hover { background: #2563eb; transform: translateY(-3px); box-shadow: 0 8px 25px rgba(59,130,246,0.4); }
+        .cta-button i { margin-right: 8px; }
+        .hero-scroll-indicator { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); animation: bounce 2s infinite; }
+        .scroll-arrow { width: 20px; height: 20px; border-right: 2px solid #94a3b8; border-bottom: 2px solid #94a3b8; transform: rotate(45deg); }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-10px); } }
+
+        /* ===== SECTION ===== */
+        .section { padding: 5rem 0; }
+        .section-title {
+            text-align: center; font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 700;
+            margin-bottom: 3rem; position: relative;
+        }
+        .section-title::after {
+            content: ''; position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%);
+            width: 60px; height: 3px; background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            border-radius: 2px;
+        }
+        .section-title i { color: #3b82f6; margin-right: 12px; }
+        .section-subtitle { text-align: center; color: #64748b; margin-top: -1.5rem; margin-bottom: 2.5rem; font-size: 1.1rem; }
+
+        .fade-in { opacity: 0; transform: translateY(30px); transition: all 0.7s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* ===== ABOUT ===== */
+        .about { background: #ffffff; }
+        .about-content { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .about-text .section-title { text-align: left; }
+        .about-text .section-title::after { left: 0; transform: none; }
+        .about-description { color: #475569; }
+        .about-stats { display: flex; gap: 2.5rem; margin-top: 2rem; flex-wrap: wrap; }
+        .stat { text-align: center; }
+        .stat-number { display: block; font-size: 2.2rem; font-weight: 800; color: #3b82f6; }
+        .stat-label { font-size: 0.85rem; color: #64748b; font-weight: 500; }
+        .profile-image { width: 100%; max-width: 400px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); transition: transform 0.3s; background: #eef2ff; }
+        .profile-image:hover { transform: scale(1.02); }
+
+        /* ===== SKILLS ===== */
+        .skills { background: #f8fafc; }
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+        .skill-card {
+            background: #fff; padding: 2rem; border-radius: 20px; text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04); border: 1px solid #eef2ff;
+            transition: all 0.3s;
+        }
+        .skill-card:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); border-color: #3b82f6; }
+        .skill-icon { font-size: 2.8rem; margin-bottom: 1rem; }
+        .skill-title { font-weight: 600; margin-bottom: 0.5rem; }
+        .skill-description { color: #64748b; font-size: 0.95rem; }
+        .skill-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-top: 1rem; }
+        .skill-tag { background: #eef2ff; color: #3b82f6; padding: 0.2rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+        /* ===== CAROUSEL ===== */
+        .carousel-section { background: #ffffff; }
+        .carousel-container { position: relative; overflow: hidden; border-radius: 24px; box-shadow: 0 8px 30px rgba(0,0,0,0.06); }
+        .carousel-track { display: flex; transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .carousel-slide { min-width: 100%; padding: 2rem; background: #f8fafc; }
+        .carousel-slide iframe { width: 100%; height: 500px; border: none; border-radius: 16px; background: #fff; }
+        .carousel-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(255,255,255,0.9); border: none; border-radius: 50%;
+            width: 48px; height: 48px; font-size: 1.2rem; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.3s;
+            z-index: 10; color: #0f172a;
+        }
+        .carousel-btn:hover { background: #fff; box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+        .carousel-btn.prev { left: 1rem; }
+        .carousel-btn.next { right: 1rem; }
+        .carousel-dots { display: flex; justify-content: center; gap: 0.75rem; margin-top: 1.5rem; }
+        .carousel-dot {
+            width: 12px; height: 12px; border-radius: 50%; background: #cbd5e1;
+            border: none; cursor: pointer; transition: all 0.3s;
+        }
+        .carousel-dot.active { background: #3b82f6; transform: scale(1.2); }
+
+        /* ===== PROJECT CARDS (Apa, Kenapa, Solusi, Hasil) ===== */
+        .projects { background: #f8fafc; }
+        .project-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
+        .project-card {
+            background: #fff; border-radius: 24px; overflow: hidden;
+            border: 1px solid #eef2ff; transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+        }
+        .project-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
+        .project-header { padding: 1.5rem 2rem 0.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+        .project-header h3 { font-size: 1.4rem; margin-bottom: 0.25rem; }
+        .project-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .project-tag { background: #e0f2fe; color: #0369a1; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
+        .project-tag.colab { background: #fef3c7; color: #92400e; }
+        .project-tag.dashboard { background: #dbeafe; color: #1d4ed8; }
+        .colab-link { background: #f59e0b; color: #0f172a; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: background 0.2s; }
+        .colab-link:hover { background: #d97706; text-decoration: none; }
+        .project-body { padding: 0 2rem 2rem; }
+        .project-body p { color: #475569; font-size: 1rem; margin-bottom: 0.75rem; }
+        .project-body .label { font-weight: 700; color: #0f172a; display: block; margin-top: 0.75rem; }
+        .project-body .label i { color: #3b82f6; margin-right: 6px; width: 20px; }
+        .project-body .value { margin-left: 1.8rem; color: #334155; }
+        .insight-box { background: #f0fdf4; border-left: 4px solid #10b981; padding: 1rem 1.5rem; border-radius: 12px; margin: 1rem 0; }
+        .insight-box i { color: #059669; margin-right: 8px; }
+        .result-stats { background: #f1f5f9; padding: 1rem 1.5rem; border-radius: 12px; font-weight: 500; margin-top: 1rem; color: #0f172a; }
+        .chart-container { width: 100%; height: 300px; margin: 1.5rem 0; border-radius: 16px; background: #fff; border: 1px solid #e2e8f0; padding: 4px; }
+        .code-block { background: #1e293b; border-radius: 16px; padding: 1.2rem; margin: 1.5rem 0; overflow-x: auto; }
+        .code-block pre { margin: 0; font-family: 'Fira Code', monospace; font-size: 0.8rem; color: #e2e8f0; }
+
+        /* ===== TESTIMONIALS ===== */
+        .testimonials { background: #ffffff; }
+        .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .testimonial-card { background: #f8fafc; padding: 2rem; border-radius: 20px; border: 1px solid #eef2ff; transition: all 0.3s; }
+        .testimonial-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.06); }
+        .testimonial-text { font-size: 1.05rem; color: #334155; font-style: italic; margin-bottom: 1.5rem; }
+        .testimonial-author { display: flex; align-items: center; gap: 1rem; }
+        .author-image { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; background: #e2e8f0; }
+        .author-name { font-weight: 600; margin-bottom: 0.1rem; }
+        .author-title { font-size: 0.85rem; color: #64748b; }
+
+        /* ===== CONTACT ===== */
+        .contact { background: #f8fafc; }
+        .contact-content { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+        .contact-info .section-title { text-align: left; }
+        .contact-info .section-title::after { left: 0; transform: none; }
+        .contact-details { margin: 2rem 0; }
+        .contact-item { display: flex; flex-direction: column; margin-bottom: 1rem; }
+        .contact-label { font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; }
+        .contact-link { color: #3b82f6; text-decoration: none; font-weight: 500; }
+        .contact-link:hover { color: #2563eb; }
+        .social-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+        .social-link { color: #64748b; text-decoration: none; font-weight: 500; transition: color 0.3s; }
+        .social-link:hover { color: #3b82f6; }
+        .social-link i { margin-right: 6px; }
+        .contact-form { background: #fff; padding: 2rem; border-radius: 20px; border: 1px solid #eef2ff; }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-label { display: block; font-weight: 600; margin-bottom: 0.4rem; color: #0f172a; font-size: 0.9rem; }
+        .form-input, .form-textarea { width: 100%; padding: 0.75rem 1rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; font-family: inherit; transition: border-color 0.3s; background: #fff; }
+        .form-input:focus, .form-textarea:focus { outline: none; border-color: #3b82f6; }
+        .form-textarea { resize: vertical; min-height: 120px; }
+        .submit-button { background: #3b82f6; color: #fff; border: none; padding: 0.9rem 2rem; border-radius: 50px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; width: 100%; }
+        .submit-button:hover { background: #2563eb; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(59,130,246,0.3); }
+
+        /* ===== FOOTER ===== */
+        .footer { background: #0f172a; color: #94a3b8; padding: 2rem 0; }
+        .footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .footer-text { margin: 0; font-size: 0.9rem; }
+        .footer-nav { display: flex; gap: 2rem; }
+        .footer-link { color: #94a3b8; text-decoration: none; font-size: 0.9rem; transition: color 0.3s; }
+        .footer-link:hover { color: #fff; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .about-content { grid-template-columns: 1fr; gap: 2rem; text-align: center; }
+            .about-text .section-title { text-align: center; }
+            .about-text .section-title::after { left: 50%; transform: translateX(-50%); }
+            .about-stats { justify-content: center; }
+            .contact-content { grid-template-columns: 1fr; gap: 2rem; }
+            .contact-info .section-title { text-align: center; }
+            .contact-info .section-title::after { left: 50%; transform: translateX(-50%); }
+            .contact-details { text-align: center; }
+            .social-links { justify-content: center; }
+        }
+        @media (max-width: 768px) {
+            .container { padding: 0 1.25rem; }
+            .section { padding: 3rem 0; }
+            .nav-menu {
+                position: fixed; left: -100%; top: 72px; flex-direction: column;
+                background: #fff; width: 100%; text-align: center;
+                transition: 0.3s; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+                padding: 2rem 0; gap: 1.5rem;
+            }
+            .nav-menu.active { left: 0; }
+            .hamburger { display: flex; }
+            .hero-stats { flex-direction: column; gap: 1rem; }
+            .project-header { flex-direction: column; align-items: stretch; }
+            .testimonials-grid { grid-template-columns: 1fr; }
+            .footer-content { flex-direction: column; text-align: center; }
+            .footer-nav { justify-content: center; flex-wrap: wrap; gap: 1rem; }
+            .carousel-slide iframe { height: 350px; }
+            .carousel-btn { width: 36px; height: 36px; font-size: 0.9rem; }
+            .carousel-btn.prev { left: 0.5rem; }
+            .carousel-btn.next { right: 0.5rem; }
+            .chart-container { height: 220px; }
+        }
+        @media (max-width: 480px) {
+            .container { padding: 0 1rem; }
+            .project-body { padding: 0 1rem 1.5rem; }
+            .project-header { padding: 1rem 1rem 0; }
+            .code-block { padding: 0.8rem; font-size: 0.7rem; }
+            .contact-form { padding: 1.25rem; }
+            .carousel-slide iframe { height: 280px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== LOADING ===== -->
+    <div id="loading-screen"><div class="loading-spinner"></div></div>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="nav-logo">Syawal<span>.</span></a>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#carousel" class="nav-link">Portfolio</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#testimonials" class="nav-link">Testimonials</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== HERO ===== -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-badge"><i class="fas fa-chart-line"></i> Data Analyst · Business Intelligence</div>
+            <h1 class="hero-title">Hi, I'm <span class="highlight">Syawal Maulana Akbari</span></h1>
+            <p class="hero-subtitle">Turning complex data into actionable business insights</p>
+            <p class="hero-description">Detail-oriented Data Analyst with 4+ years of experience in real-time KPI reporting, data quality management, and cross-functional collaboration.</p>
+            <div class="hero-stats">
+                <div class="hero-stat"><span class="number">12+</span><span class="label">Data Projects</span></div>
+                <div class="hero-stat"><span class="number">98.5%</span><span class="label">Data Accuracy</span></div>
+                <div class="hero-stat"><span class="number">5+</span><span class="label">Years Experience</span></div>
+            </div>
+            <a href="#carousel" class="cta-button"><i class="fas fa-folder-open"></i> View Portfolio</a>
+        </div>
+        <div class="hero-scroll-indicator"><div class="scroll-arrow"></div></div>
+    </section>
+
+    <!-- ===== ABOUT ===== -->
+    <section id="about" class="about section">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text fade-in">
+                    <h2 class="section-title">About Me</h2>
+                    <p class="about-description">I'm a <strong>Data Analyst</strong> passionate about transforming raw data into meaningful insights that drive business growth. With a strong foundation in SQL, Python, and data visualization, I specialize in building automated reporting systems, ensuring data quality, and uncovering hidden patterns.</p>
+                    <p class="about-description">My experience spans across <strong>logistics, retail, and fintech</strong> sectors, where I've successfully implemented real-time KPI dashboards, reduced data processing time by 70%, and increased customer retention through data-driven strategies.</p>
+                    <div class="about-stats">
+                        <div class="stat"><span class="stat-number">12+</span><span class="stat-label">Projects Delivered</span></div>
+                        <div class="stat"><span class="stat-number">4+</span><span class="stat-label">Years Experience</span></div>
+                        <div class="stat"><span class="stat-number">8+</span><span class="stat-label">Happy Clients</span></div>
+                    </div>
+                </div>
+                <div class="about-image fade-in">
+                    <img src="https://drive.google.com/thumbnail?id=1Ptgl7EjK3byNJU55J_3cwF9Bm9RCWpWc&sz=w1000" alt="Syawal Maulana Akbari" class="profile-image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SKILLS ===== -->
+    <section id="skills" class="skills section">
+        <div class="container">
+            <h2 class="section-title fade-in"><i class="fas fa-cogs"></i> Skills & Expertise</h2>
+            <div class="skills-grid">
+                <div class="skill-card fade-in">
+                    <div class="skill-icon"><i class="fas fa-database"></i></div>
+                    <h3 class="skill-title">Data Engineering</h3>
+                    <p class="skill-description">Building robust data pipelines and ETL processes</p>
+                    <div class="skill-tags"><span class="skill-tag">SQL</span><span class="skill-tag">Python</span><span class="skill-tag">dbt</span><span class="skill-tag">Airflow</span></div>
+                </div>
+                <div class="skill-card fade-in">
+                    <div class="skill-icon"><i class="fas fa-chart-pie"></i></div>
+                    <h3 class="skill-title">Data Visualization</h3>
+                    <p class="skill-description">Creating interactive dashboards that tell stories</p>
+                    <div class="skill-tags"><span class="skill-tag">Tableau</span><span class="skill-tag">Power BI</span><span class="skill-tag">Looker Studio</span><span class="skill-tag">Plotly</span></div>
+                </div>
+                <div class="skill-card fade-in">
+                    <div class="skill-icon"><i class="fas fa-robot"></i></div>
+                    <h3 class="skill-title">Analytics & ML</h3>
+                    <p class="skill-description">Predictive modeling and customer segmentation</p>
+                    <div class="skill-tags"><span class="skill-tag">Prophet</span><span class="skill-tag">Scikit-learn</span><span class="skill-tag">RFM</span><span class="skill-tag">SHAP</span></div>
+                </div>
+                <div class="skill-card fade-in">
+                    <div class="skill-icon"><i class="fas fa-check-circle"></i></div>
+                    <h3 class="skill-title">Data Quality</h3>
+                    <p class="skill-description">Ensuring accuracy and consistency across systems</p>
+                    <div class="skill-tags"><span class="skill-tag">Great Expectations</span><span class="skill-tag">Pandas</span><span class="skill-tag">Dedupe</span><span class="skill-tag">QC Automation</span></div>
+                </div>
+                <div class="skill-card fade-in">
+                    <div class="skill-icon"><i class="fas fa-clock"></i></div>
+                    <h3 class="skill-title">Real-Time Reporting</h3>
+                    <p class="skill-description">Live dashboards and automated KPI monitoring</p>
+                    <div class="skill-tags"><span class="skill-tag">Streamlit</span><span class="skill-tag">WebSocket</span><span class="skill-tag">PostgreSQL</span><span class="skill-tag">Metabase</span></div>
+                </div>
+                <div class="skill-card fade-in">
+                    <div class="skill-icon"><i class="fas fa-users"></i></div>
+                    <h3 class="skill-title">Cross-Functional</h3>
+                    <p class="skill-description">Collaborating with leadership and multiple teams</p>
+                    <div class="skill-tags"><span class="skill-tag">Agile</span><span class="skill-tag">Stakeholder Mgmt</span><span class="skill-tag">A/B Testing</span><span class="skill-tag">Storytelling</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  <!-- ===== CAROUSEL (PORTFOLIO SHOWCASE) - FIXED ===== -->
 <section id="carousel" class="carousel-section section">
     <div class="container">
         <h2 class="section-title fade-in"><i class="fas fa-images"></i> Portfolio Showcase</h2>
@@ -84,3 +514,427 @@
         <div class="carousel-dots" id="carouselDots"></div>
     </div>
 </section>
+
+    <!-- ===== PROJECTS (Apa, Kenapa, Solusi, Hasil) ===== -->
+    <section id="projects" class="projects section">
+        <div class="container">
+            <h2 class="section-title fade-in"><i class="fas fa-folder-open"></i> Data Projects</h2>
+            <p class="section-subtitle fade-in">Setiap proyek dilengkapi dengan pendekatan: Apa, Kenapa, Solusi, dan Hasil</p>
+            <div class="project-grid">
+
+                <!-- PROJECT 1: E-Commerce Dashboard -->
+                <div class="project-card fade-in">
+                    <div class="project-header">
+                        <div>
+                            <h3>📊 E-Commerce Performance Dashboard</h3>
+                            <div class="project-tags">
+                                <span class="project-tag dashboard">Looker Studio</span>
+                                <span class="project-tag">SQL</span>
+                                <span class="project-tag">Data Visualization</span>
+                                <a href="https://datastudio.google.com/u/0/reporting/f560c04d-4f88-404f-9a6b-030c56efce19/page/cWd9D" target="_blank" class="colab-link"><i class="fas fa-external-link-alt"></i> Live Dashboard</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-body">
+                        <p><strong>📌 Apa:</strong> Dashboard interaktif untuk memantau performa e-commerce secara real-time, mencakup metrik penjualan, trafik, konversi, dan retensi pelanggan.</p>
+                        <p><strong>❓ Kenapa:</strong> Tim manajemen kesulitan mendapatkan gambaran performa harian karena data tersebar di 3 platform berbeda (Google Analytics, MySQL, Shopify).</p>
+                        <p><strong>🔧 Solusi:</strong> Mengintegrasikan data dari 3 sumber ke BigQuery, lalu membangun dashboard Looker Studio dengan filter dinamis (tanggal, produk, region).</p>
+                        <div class="insight-box">
+                            <i class="fas fa-chart-line"></i> <strong>Hasil:</strong> Waktu akses laporan turun dari 4 jam → < 5 menit. Tim marketing bisa mengidentifikasi produk underperforming dalam 1 hari dan menyesuaikan strategi promosi.
+                        </div>
+                        <div class="result-stats">
+                            ✅ Metrik Utama: GMV, Conversion Rate, AOV, Customer LTV, Retention Rate (30/60/90 hari)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROJECT 2: Customer Churn Analysis -->
+                <div class="project-card fade-in">
+                    <div class="project-header">
+                        <div>
+                            <h3>📉 Customer Churn Prediction & RFM Segmentation</h3>
+                            <div class="project-tags">
+                                <span class="project-tag">Python</span>
+                                <span class="project-tag">Scikit-learn</span>
+                                <span class="project-tag">RFM</span>
+                                <span class="project-tag">SHAP</span>
+                                <a href="https://colab.research.google.com/drive/1u2oKzzDZTNpJW_JiD9LFI0B0fJ9CH7_c" target="_blank" class="colab-link"><i class="fab fa-google"></i> Colab</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-body">
+                        <p><strong>📌 Apa:</strong> Model prediktif untuk mengidentifikasi pelanggan berisiko churn dan segmentasi RFM (Recency, Frequency, Monetary).</p>
+                        <p><strong>❓ Kenapa:</strong> Tingkat churn pelanggan mencapai 18% per kuartal, mengakibatkan penurunan pendapatan berulang. Tim marketing membutuhkan targeting yang lebih presisi.</p>
+                        <p><strong>🔧 Solusi:</strong> Analisis 500.000+ transaksi dengan RFM segmentation dan Random Forest untuk feature importance. Hasilnya diintegrasikan ke CRM untuk campaign otomatis.</p>
+                        <div class="code-block">
+                            <pre><code># RFM Segmentation & Churn Prediction
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+
+rfm = df.groupby('customer_id').agg({
+    'date': lambda x: (pd.Timestamp.now() - x.max()).days,
+    'invoice': 'count',
+    'amount': 'sum'
+}).rename(columns={'date':'recency','invoice':'frequency','amount':'monetary'})
+
+rfm['churn'] = (rfm['recency'] > 90).astype(int)
+model = RandomForestClassifier().fit(rfm[['recency','frequency','monetary']], rfm['churn'])</code></pre>
+                        </div>
+                        <div class="insight-box">
+                            <i class="fas fa-lightbulb"></i> <strong>Hasil:</strong> Retention meningkat 9% dalam 2 bulan. ROI campaign reactivation mencapai 4.2x. Model diadopsi sebagai KPI churn bulanan oleh tim marketing.
+                        </div>
+                        <div class="chart-container" id="chartChurn"></div>
+                    </div>
+                </div>
+
+                <!-- PROJECT 3: Real-Time KPI Dashboard -->
+                <div class="project-card fade-in">
+                    <div class="project-header">
+                        <div>
+                            <h3>🚚 Real-Time Logistics KPI Dashboard</h3>
+                            <div class="project-tags">
+                                <span class="project-tag">Python</span>
+                                <span class="project-tag">Streamlit</span>
+                                <span class="project-tag">PostgreSQL</span>
+                                <span class="project-tag">Plotly</span>
+                                <a href="https://colab.research.google.com/drive/11jrXkFM_dPPssh2IzEn6pyaeqYZqqTig" target="_blank" class="colab-link"><i class="fab fa-google"></i> Colab</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-body">
+                        <p><strong>📌 Apa:</strong> Dashboard real-time monitoring On-Time Delivery (OTD), waktu tunggu, dan throughput gudang. Refresh data setiap 30 detik.</p>
+                        <p><strong>❓ Kenapa:</strong> Tim operasional kesulitan mendeteksi bottleneck secara cepat. Laporan harian hanya tersedia keesokan harinya.</p>
+                        <p><strong>🔧 Solusi:</strong> Menggunakan WebSocket untuk streaming data dari API internal, disimpan ke PostgreSQL, dan ditampilkan dengan Streamlit + Plotly.</p>
+                        <div class="insight-box">
+                            <i class="fas fa-chart-line"></i> <strong>Hasil:</strong> Deteksi lonjakan waktu tunggu >30 menit dalam 5 menit. OTD meningkat 12% dalam 2 bulan. Tim gudang bisa menambah shift secara real-time.
+                        </div>
+                        <div class="chart-container" id="chartRealTime"></div>
+                    </div>
+                </div>
+
+                <!-- PROJECT 4: Sales Forecasting -->
+                <div class="project-card fade-in">
+                    <div class="project-header">
+                        <div>
+                            <h3>📈 Sales Forecasting dengan Prophet</h3>
+                            <div class="project-tags">
+                                <span class="project-tag">Prophet</span>
+                                <span class="project-tag">Time Series</span>
+                                <span class="project-tag">Forecasting</span>
+                                <a href="https://colab.research.google.com/drive/18C5EhpM8INwTz1DPfTRSC-80oQPXzmTY" target="_blank" class="colab-link"><i class="fab fa-google"></i> Colab</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-body">
+                        <p><strong>📌 Apa:</strong> Model prediksi volume order harian untuk 30 hari ke depan menggunakan Facebook Prophet.</p>
+                        <p><strong>❓ Kenapa:</strong> Perencanaan kapasitas gudang & staffing CS sering kurang akurat, menyebabkan overtime berlebihan atau stockout.</p>
+                        <p><strong>🔧 Solusi:</strong> Melatih model Prophet dengan 2 tahun data harian, mempertimbangkan efek musiman (harian, mingguan, tahunan) dan hari libur nasional.</p>
+                        <div class="insight-box">
+                            <i class="fas fa-chart-line"></i> <strong>Hasil:</strong> MAPE 8.3% pada test set. Terdeteksi pola kenaikan 25% di akhir bulan & penurunan 15% saat libur. Lost sales karena stockout turun 11%.
+                        </div>
+                        <div class="chart-container" id="chartForecast"></div>
+                    </div>
+                </div>
+
+                <!-- PROJECT 5: Data Quality Automation -->
+                <div class="project-card fade-in">
+                    <div class="project-header">
+                        <div>
+                            <h3>⚙️ Automated Data Quality Pipeline</h3>
+                            <div class="project-tags">
+                                <span class="project-tag">Great Expectations</span>
+                                <span class="project-tag">dbt</span>
+                                <span class="project-tag">Airflow</span>
+                                <a href="https://colab.research.google.com/drive/1_iiUyXRF5S2ziIaKsPUYfGsqgaIVrfP1" target="_blank" class="colab-link"><i class="fab fa-google"></i> Colab</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-body">
+                        <p><strong>📌 Apa:</strong> Pipeline otomatis dengan 20+ aturan kualitas data (uniqueness, null checks, referential integrity, regex).</p>
+                        <p><strong>❓ Kenapa:</strong> 100% manual review data menyebabkan error tidak terdeteksi hingga laporan akhir bulan, memakan waktu 9 jam per minggu untuk persiapan data.</p>
+                        <p><strong>🔧 Solusi:</strong> Implementasi Great Expectations + dbt tests yang berjalan setiap pipeline ELT selesai. Alert ke Slack jika fail rate > 1%.</p>
+                        <div class="insight-box">
+                            <i class="fas fa-chart-line"></i> <strong>Hasil:</strong> Waktu persiapan data turun 9 jam → 1,2 jam. Error data entry berkurang 74%. Tim analis bisa fokus ke insight, bukan cleaning.
+                        </div>
+                        <div class="chart-container chart-container-sm" id="chartQC"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TESTIMONIALS ===== -->
+    <section id="testimonials" class="testimonials section">
+        <div class="container">
+            <h2 class="section-title fade-in"><i class="fas fa-quote-left"></i> What People Say</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card fade-in">
+                    <p class="testimonial-text">"Syawal's ability to turn complex data into clear, actionable insights is exceptional. His KPI dashboard completely transformed our logistics operations."</p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=60" alt="Andi Pratama" class="author-image">
+                        <div><h4 class="author-name">Andi Pratama</h4><p class="author-title">Operations Director, LogistikID</p></div>
+                    </div>
+                </div>
+                <div class="testimonial-card fade-in">
+                    <p class="testimonial-text">"The churn prediction model Syawal built helped us increase customer retention by 9% in just 2 months. His insights were spot on."</p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&auto=format&fit=crop&q=60" alt="Budi Santoso" class="author-image">
+                        <div><h4 class="author-name">Budi Santoso</h4><p class="author-title">CEO, RetailPlus</p></div>
+                    </div>
+                </div>
+                <div class="testimonial-card fade-in">
+                    <p class="testimonial-text">"Syawal's data quality framework reduced our reporting errors by 74%. He's a detail-oriented analyst who truly understands business needs."</p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=60" alt="Dewi Lestari" class="author-image">
+                        <div><h4 class="author-name">Dewi Lestari</h4><p class="author-title">Head of Data, FinTech Solutions</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CONTACT ===== -->
+    <section id="contact" class="contact section">
+        <div class="container">
+            <div class="contact-content">
+                <div class="contact-info fade-in">
+                    <h2 class="section-title">Let's Work Together</h2>
+                    <p class="contact-description">I'm always open to new opportunities and collaborations. Whether you need help with data strategy, dashboard development, or analytics, let's talk.</p>
+                    <div class="contact-details">
+                        <div class="contact-item"><span class="contact-label">Email</span><a href="mailto:syawal.maulana@dataanalyst.id" class="contact-link">syawal.maulana@dataanalyst.id</a></div>
+                        <div class="contact-item"><span class="contact-label">Location</span><span class="contact-link">Jakarta, Indonesia</span></div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                        <a href="#" class="social-link"><i class="fab fa-github"></i> GitHub</a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i> Twitter</a>
+                        <a href="#" class="social-link"><i class="fab fa-medium"></i> Medium</a>
+                    </div>
+                </div>
+                <form class="contact-form fade-in" id="contact-form">
+                    <div class="form-group"><label class="form-label">Full Name</label><input type="text" class="form-input" placeholder="Your name" required></div>
+                    <div class="form-group"><label class="form-label">Email Address</label><input type="email" class="form-input" placeholder="you@example.com" required></div>
+                    <div class="form-group"><label class="form-label">Subject</label><input type="text" class="form-input" placeholder="Project discussion" required></div>
+                    <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" rows="5" placeholder="Tell me about your project..." required></textarea></div>
+                    <button type="submit" class="submit-button"><i class="fas fa-paper-plane"></i> Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-text">&copy; <span id="year"></span> Syawal Maulana Akbari. All rights reserved.</p>
+                <nav class="footer-nav">
+                    <a href="#home" class="footer-link">Home</a>
+                    <a href="#about" class="footer-link">About</a>
+                    <a href="#carousel" class="footer-link">Portfolio</a>
+                    <a href="#contact" class="footer-link">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ===== LOADING =====
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loading-screen').classList.add('fade-out');
+                setTimeout(() => document.getElementById('loading-screen').style.display = 'none', 600);
+            }, 800);
+        });
+
+        // ===== NAVBAR =====
+        const navbar = document.getElementById('navbar');
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('nav-menu');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 50));
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        navLinks.forEach(link => link.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+        }));
+
+        // ===== ACTIVE LINK =====
+        window.addEventListener('scroll', () => {
+            let current = '';
+            document.querySelectorAll('section').forEach(section => {
+                const top = section.offsetTop - 150;
+                if (window.scrollY >= top) current = section.getAttribute('id');
+            });
+            navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === `#${current}`));
+        });
+
+        // ===== SCROLL ANIMATIONS =====
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // ===== CAROUSEL =====
+        let currentSlide = 0;
+        const track = document.getElementById('carouselTrack');
+        const slides = track.querySelectorAll('.carousel-slide');
+        const totalSlides = slides.length;
+        const dotsContainer = document.getElementById('carouselDots');
+
+        // Create dots
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('button');
+            dot.className = `carousel-dot ${i === 0 ? 'active' : ''}`;
+            dot.dataset.index = i;
+            dot.addEventListener('click', () => goToSlide(i));
+            dotsContainer.appendChild(dot);
+        }
+
+        function goToSlide(index) {
+            currentSlide = (index + totalSlides) % totalSlides;
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+        }
+
+        document.getElementById('carouselPrev').addEventListener('click', () => goToSlide(currentSlide - 1));
+        document.getElementById('carouselNext').addEventListener('click', () => goToSlide(currentSlide + 1));
+
+        // Auto-play carousel
+        let interval = setInterval(() => goToSlide(currentSlide + 1), 8000);
+        document.querySelector('.carousel-container').addEventListener('mouseenter', () => clearInterval(interval));
+        document.querySelector('.carousel-container').addEventListener('mouseleave', () => {
+            interval = setInterval(() => goToSlide(currentSlide + 1), 8000);
+        });
+
+        // ===== CHARTS =====
+
+        // Chart: Churn Analysis
+        Plotly.newPlot('chartChurn', [{
+            x: ['Recency', 'Frequency', 'Monetary'],
+            y: [55, 28, 17],
+            type: 'bar',
+            marker: { color: ['#ef4444', '#f59e0b', '#3b82f6'] },
+            text: ['55%', '28%', '17%'],
+            textposition: 'outside'
+        }], {
+            title: 'Feature Importance: Churn Drivers (RFM)',
+            xaxis: { title: 'Factor' },
+            yaxis: { title: 'Contribution (%)', range: [0, 70] },
+            margin: { l: 60, r: 30, t: 60, b: 50 },
+            template: 'plotly_white'
+        });
+
+        // Chart: Real-Time KPI
+        Plotly.newPlot('chartRealTime', [{
+            x: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+            y: [88.2, 91.5, 94.3, 96.8],
+            type: 'scatter',
+            mode: 'lines+markers',
+            line: { color: '#3b82f6', width: 3 },
+            marker: { size: 10 },
+            name: 'OTD Rate (%)'
+        }, {
+            x: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+            y: [18.5, 16.2, 13.8, 11.3],
+            type: 'scatter',
+            mode: 'lines+markers',
+            line: { color: '#ef4444', width: 3, dash: 'dot' },
+            marker: { size: 10 },
+            name: 'Avg Wait (min)',
+            yaxis: 'y2'
+        }], {
+            title: 'Logistics Performance: OTD vs Wait Time',
+            xaxis: { title: 'Period' },
+            yaxis: { title: 'OTD Rate (%)', range: [80, 100] },
+            yaxis2: { title: 'Wait Time (min)', overlaying: 'y', side: 'right', range: [0, 25] },
+            margin: { l: 60, r: 70, t: 60, b: 50 },
+            template: 'plotly_white',
+            legend: { x: 0.02, y: 0.98 }
+        });
+
+        // Chart: Sales Forecasting
+        Plotly.newPlot('chartForecast', [{
+            x: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            y: [8200, 8900, 9500, 9200, 10100, 11200, 9800, 10500, 11800, 12500, 14200, 15100],
+            type: 'scatter',
+            mode: 'lines+markers',
+            line: { color: '#3b82f6', width: 3 },
+            marker: { size: 8 },
+            name: 'Actual Sales'
+        }, {
+            x: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            y: [8100, 8800, 9600, 9100, 10200, 11000, 9900, 10600, 11700, 12600, 14000, 15300],
+            type: 'scatter',
+            mode: 'lines+markers',
+            line: { color: '#ef4444', width: 3, dash: 'dash' },
+            marker: { size: 8 },
+            name: 'Forecast (Prophet)'
+        }], {
+            title: 'Sales Forecast vs Actual (MAPE 8.3%)',
+            xaxis: { title: 'Month' },
+            yaxis: { title: 'Order Volume' },
+            margin: { l: 60, r: 30, t: 60, b: 50 },
+            template: 'plotly_white',
+            legend: { x: 0.02, y: 0.98 }
+        });
+
+        // Chart: QC Automation
+        Plotly.newPlot('chartQC', [{
+            x: ['Manual (Before)', 'Automated (After)'],
+            y: [540, 72],
+            type: 'bar',
+            marker: { color: ['#ef4444', '#22c55e'] },
+            text: ['9 hours', '1.2 hours'],
+            textposition: 'outside'
+        }], {
+            title: 'Data Preparation Time: Before vs After QC Automation',
+            xaxis: { title: 'Method' },
+            yaxis: { title: 'Time (minutes)' },
+            margin: { l: 60, r: 30, t: 60, b: 50 },
+            template: 'plotly_white'
+        });
+
+        // ===== FORM =====
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('.submit-button');
+            const original = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            btn.disabled = true;
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
+                btn.style.background = '#22c55e';
+                this.reset();
+                setTimeout(() => {
+                    btn.innerHTML = original;
+                    btn.style.background = '';
+                    btn.disabled = false;
+                }, 2500);
+            }, 2000);
+        });
+
+        // ===== YEAR =====
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // ===== SMOOTH SCROLL =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({ top: target.offsetTop - 72, behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
